@@ -37,7 +37,7 @@ public class Feedback_NevActivity extends AppCompatActivity  implements AdapterV
     EditText feedbox;
     SessionManger sessionManger;
 String postion;
-    String sclId,stid,URL="http://schoolian.website/android/feedback.php";
+    String sclId,stid,URL="https://schoolian.website/android/feedback.php";
     Spinner spin;
     ProgressBar progressBar;
 

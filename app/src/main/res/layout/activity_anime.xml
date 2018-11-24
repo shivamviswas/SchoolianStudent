@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wikav.student.studentapp.activities.AnimeActivity">
+    tools:context="com.wikav.teahcer.teacherApp.activities.AnimeActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleTextColor="@android:color/white"
-        android:background="?attr/colorPrimary">
+        android:background="@color/colorPrimary">
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
@@ -26,142 +26,140 @@
             android:layout_height="match_parent">
 
 
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/boxforcomnt"
-            android:id="@+id/main_post">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:srcCompat="@android:drawable/arrow_down_float"
-                android:clickable="true"
-                android:onClick="deletEdit"/>
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/thumbnail_on"
-                android:orientation="horizontal" >
+                android:layout_margin="5dp"
+                android:background="@drawable/boxforcomnt"
+                android:id="@+id/main_post">
 
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:srcCompat="@android:drawable/arrow_down_float"
+                    android:clickable="true"
+                    android:onClick="deletEdit"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".49"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/thumbnail_on"
+                    android:orientation="horizontal" >
 
-                    android:orientation="horizontal"
-                    android:text="star">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".49"
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@android:drawable/btn_star_big_on"
-                        android:id="@+id/starIMG"
-                        android:layout_marginLeft="30dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="stars"
-                        android:id="@+id/starGeti"
-                        android:layout_gravity="center"
-                        android:padding="15dp"
-                        />
+                        android:orientation="horizontal"
+                        android:text="star">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@android:drawable/btn_star_big_on"
+                            android:id="@+id/starIMG"
+                            android:layout_marginLeft="30dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="stars"
+                            android:id="@+id/starGeti"
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/answers"
+                        android:layout_weight=".49"
+
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="ANSWERS"
+
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            android:layout_marginLeft="30dp"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
+
+
+
+
+                <com.github.chrisbanes.photoview.PhotoView
+                    android:id="@+id/thumbnail_on"
                     android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:padding="10dp"
+                    android:layout_below="@+id/post_on"
+                    android:visibility="gone"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/anime_name_on"
+                    android:id="@+id/post_on"
+                    android:padding="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Your post"
+                    />
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_pic_on"
+                    android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:id="@+id/answers"
-                    android:layout_weight=".49"
-
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="ANSWERS"
-
-                        android:layout_gravity="center"
-                        android:padding="15dp"
-                        android:layout_marginLeft="30dp"
-                        />
-                </LinearLayout>
-            </LinearLayout>
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/man"
+                    app:civ_border_color="#FFFFFFFF"
+                    app:civ_border_width="3dp" />
 
 
+                <TextView
+                    android:id="@+id/anime_name_on"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_pic_on"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toEndOf="@+id/profile_pic_on"
+                    android:layout_toRightOf="@+id/profile_pic_on"
+                    android:text="Animesdsd Title"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-
-            <ImageView
-                android:id="@+id/thumbnail_on"
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_below="@+id/main_post"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/post_on"
-                android:layout_marginTop="26dp"
-                android:maxHeight="250dp"
-                android:padding="10dp"
-                android:layout_below="@+id/post_on"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/anime_name_on"
-        android:id="@+id/post_on"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="15dp"
-        android:text="Your post"/>
+                android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_pic_on"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:elevation="5dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/man"
-        app:civ_border_color="#FFFFFFFF"
-        app:civ_border_width="3dp" />
-
-
-            <TextView
-                android:id="@+id/anime_name_on"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/profile_pic_on"
-                android:layout_marginLeft="18dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/profile_pic_on"
-                android:layout_toRightOf="@+id/profile_pic_on"
-                android:text="Animesdsd Title"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-    <RelativeLayout
-        android:layout_below="@+id/main_post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-          android:layout_margin="2dp"
-            android:id="@+id/recyclerviewComment"
-            android:nestedScrollingEnabled="false">
-        </android.support.v7.widget.RecyclerView>
-    </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:id="@+id/recyclerviewComment"
+                    android:nestedScrollingEnabled="false">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
 
 
         </RelativeLayout>

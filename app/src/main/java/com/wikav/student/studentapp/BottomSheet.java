@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.MainActivties.NewProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by wikav-pc on 8/29/2018.
@@ -37,8 +40,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
     SessionManger sessionManger;
     EditText name,lastname,email,phone,bio,passowrd;
     ProgressBar progressBar;
+    NewProfile profile;
 
-    final String Url="http://schoolian.website/android/updateProfile.php";
+    final String Url="https://schoolian.website/android/updateProfile.php";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         phone=v.findViewById(R.id.upmobile);
         bio=v.findViewById(R.id.upbio);
         passowrd=v.findViewById(R.id.upPass);
-
+profile=new NewProfile();
         name.setText(Ename);
         lastname.setText(last);
         email.setText(Eemail);
@@ -74,8 +78,51 @@ public class BottomSheet extends BottomSheetDialogFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateClick(name.getText().toString(),lastname.getText().toString(),email.getText().toString(),bio.getText().toString(),
-                        passowrd.getText().toString(),phone.getText().toString(),sclId,Esid);
+
+                final String names=name.getText().toString();
+                final String lastnames=lastname.getText().toString();
+                final String emails=email.getText().toString();
+                final String bios=bio.getText().toString();
+                final String pass= passowrd.getText().toString();
+                final String phones=phone.getText().toString();
+
+                if(!names.equals("")&&!lastnames.equals("")&&!emails.equals("")&&!bios.equals("")&&!pass.equals("")&&!phones.equals(""))
+                {
+                    if(emailValidator(emails))
+                    {
+
+                        if(phones.charAt(0)=='6'||phones.charAt(0)=='7'||phones.charAt(0)=='8'||phones.charAt(0)=='9')
+                        {
+                            if(phone.length()>9)
+                            {
+                                updateClick(names,lastnames,emails,bios,pass,phones,sclId,Esid);
+
+                            }
+                            else
+                            {
+                                phone.setError("Please Enter Valid Mobile No.");
+                            }
+                            //  submitMethod(name, school_id, lastname, phone, email, pass, selectedClassId);
+                            // Toast.makeText(this, "Call Response" + kk, Toast.LENGTH_SHORT).show();
+                        }
+                      else
+                      {
+                          phone.setError("Please Enter Valid Mobile No.");
+
+                      }
+                    }
+
+                }
+                else
+                {
+                    name.setError("please fill all fields");
+                    lastname.setError("please fill all fields");
+                    email.setError("please fill all fields");
+                    bio.setError("please fill all fields");
+                    passowrd.setError("please fill all fields");
+                    phone.setError("please fill all fields");
+                }
+
             }
         });
 
@@ -117,11 +164,7 @@ progressBar=v.findViewById(R.id.upprog);
 //                                    sessionManger.editor.clear();
 //                                    sessionManger.editor.commit();
                                     sessionManger.UpdateSession(name, email, bio, sid, photo, scl_id, classs, lastname, phone,sclname,pass);
-//                                    Intent intent = new Intent(Login.this, HomeMenuActivity.class);
-//                                    //                    intent.putExtra("name",name);
-////                            intent.putExtra("email",email);
-//                                    startActivity(intent);
-//                                    finish();
+                                    profile.profileData();
                                 }
 
 
@@ -162,5 +205,14 @@ progressBar=v.findViewById(R.id.upprog);
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
+    }
+    public boolean emailValidator(String email)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 
@@ -35,9 +36,9 @@ import java.util.Map;
 public class Message_NevActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String[] bankNames={"Select","Principle","Teacher"};
     List<String> teacher;
-    final String JSON_URL="http://schoolian.website/android/getTeacherMsg.php";
-    final String JSON_TECHER="http://schoolian.website/android/sendToTeacher.php";
-    final String JSON_ADMIN="http://schoolian.website/android/sendToTeacher.php";
+    final String JSON_URL="https://schoolian.website/android/getTeacherMsg.php";
+    final String JSON_TECHER="https://schoolian.website/android/sendToTeacher.php";
+    final String JSON_ADMIN="https://schoolian.website/android/sendToTeacher.php";
 
     String selectedSubject =null;
     ArrayAdapter<String> dataAdapter;
@@ -51,6 +52,9 @@ public class Message_NevActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_message__nev );
+        Config config=new Config(this);
+
+        config.CheckConnection();
         sessionManger=new SessionManger(Message_NevActivity.this);
         HashMap<String, String> user=sessionManger.getUserDetail();
         String Esclid = user.get(sessionManger.SCL_ID);

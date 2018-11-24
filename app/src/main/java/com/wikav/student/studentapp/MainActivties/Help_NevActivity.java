@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 
 public class Help_NevActivity extends AppCompatActivity {
@@ -14,6 +15,9 @@ public class Help_NevActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_help );
+        Config config=new Config(this);
+
+        config.CheckConnection();
 
         Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
         // Sets the Toolbar to act as the ActionBar for this Activity window.

@@ -49,13 +49,14 @@ public class Confirm_password_Activity extends AppCompatActivity {
 
     public void confirmPassword(View view) {
         if(cpas.getText().toString().equals(pass.getText().toString())){
-            UploadPicture(mobile,pass.getText().toString());
+           final String passs=pass.getText().toString();
+            sendPassword(mobile,passs);
         }
         else {
           hint.setError("Password and confirm password not match");
         }
     }
-    private void UploadPicture(final String mobile, final String pass) {
+    private void sendPassword(final String mobile, final String pass) {
 
 
         //   progressDialog.show();
@@ -75,10 +76,11 @@ public class Confirm_password_Activity extends AppCompatActivity {
                             if (success.equals("1")) {
                                 Toast.makeText(Confirm_password_Activity.this, "Successfully changed", Toast.LENGTH_SHORT).show();
 
-                                String msg = "Dear User, You have successfully changed your password. Now your Username : " + mobile + " and Password is " + pass + ".Thank You.";
+                                String msg = "Dear User, You have successfully changed your password. Now your Username : " + mobile + " and Password is " + pass + ". Thank You.";
                                 SendOtp otp = new SendOtp(mobile, msg);
                                 if (otp.sendOtp()) {
                                     Intent intent = new Intent(Confirm_password_Activity.this, Login.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
                                 }

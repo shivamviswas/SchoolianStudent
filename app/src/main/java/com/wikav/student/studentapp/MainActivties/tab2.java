@@ -17,12 +17,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 import com.wikav.student.studentapp.adapters.AdapterForMarks;
@@ -39,8 +41,8 @@ import java.util.Map;
 
 public class tab2 extends Fragment implements AdapterView.OnItemSelectedListener {
     private RecyclerView.LayoutManager layoutManager;
-    private final String JSON_URL_EXAM = "http://schoolian.website/android/getExamName.php" ;
-    private final String JSON_URL = "http://schoolian.website/android/Marks.php" ;
+    private final String JSON_URL_EXAM = "https://schoolian.website/android/getExamName.php" ;
+    private final String JSON_URL = "https://schoolian.website/android/Marks.php" ;
 
 
     private List<Marks> lstAnime ;
@@ -72,7 +74,9 @@ public class tab2 extends Fragment implements AdapterView.OnItemSelectedListener
         sclid=Esclid;
         sidi=Sid;
         clas=Ecls;
+        Config config=new Config(getActivity());
 
+        config.CheckConnection();
        // showMarks(sclid,clas,sidi);
         getExamName(sclid,clas);
         view=inflater.inflate(R.layout.tab2,container,false);
@@ -219,7 +223,10 @@ private void getExamName(final String sclid, final String clas)
         };
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     private void setuprecyclerview(List<Marks> userPostsList) {

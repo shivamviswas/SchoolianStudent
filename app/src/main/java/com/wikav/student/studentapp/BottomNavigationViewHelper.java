@@ -22,8 +22,7 @@ public class BottomNavigationViewHelper {
            @Override
            //bottomCheck
            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                //BottomCheck bottomCheck=new BottomCheck();
-                HomeMenuActivity bottomCheck=new HomeMenuActivity();
+
 
                switch (item.getItemId()){
                    case R.id.home:

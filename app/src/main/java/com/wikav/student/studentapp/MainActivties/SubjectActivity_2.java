@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.wikav.student.studentapp.BottomNavigationViewHelper;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.FragmentActivityForRegistration;
 import com.wikav.student.studentapp.Marks_Fragment2;
 import com.wikav.student.studentapp.R;
@@ -29,6 +30,11 @@ public class SubjectActivity_2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_subject_2 );
+
+        Config config=new Config(this);
+
+        config.CheckConnection();
+
         setUpBottomNavigationView();
 
 

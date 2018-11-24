@@ -29,8 +29,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.wikav.student.studentapp.BottomNavigationViewHelper;
 import com.wikav.student.studentapp.BottomSheet;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 
@@ -51,69 +54,46 @@ public class NewProfile extends AppCompatActivity {
     Bitmap bitmap;
     String getId;
     RequestBuilder requestBuilder;
-   // private final String uplod="http://192.168.43.188/android/upload.php";
-    private final String uplod="http://schoolian.website/android/upload.php";
+    HashMap<String, String> user;
+   // private final String uplod="https://192.168.43.188/android/upload.php";
+    private final String uplod="https://schoolian.website/android/upload.php";
 
-
+RequestOptions option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_profile);
        // imView = findViewById(R.id.profile);
+        Config config=new Config(this);
+
+        config.CheckConnection();
         setUpBottomNavigationView();
         sessionManger=new SessionManger(this);
         sessionManger.checkLogin();
        logut=(Button)findViewById(R.id.logoutPro);
         editProfile=(Button)findViewById(R.id.editPro);
-
+        option = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.man);
         name=findViewById(R.id.name);
        email=findViewById(R.id.emailof);
        mobile=findViewById(R.id.mobileof);
       className=findViewById(R.id.location);
       sclName=findViewById(R.id.designation);
-
+      user=sessionManger.getUserDetail();
        bio=findViewById(R.id.bio);
 
         imView = findViewById( R.id.profile );
-        HashMap<String, String> user=sessionManger.getUserDetail();
-       String Ename = user.get(sessionManger.NAME);
-      String Eemail = user.get(sessionManger.EMAIL);
-      String Esid = user.get(sessionManger.SID);
-       String Ebio = user.get(sessionManger.BIO);
-        String mobile = user.get(sessionManger.MOBILE);
-        String sclName = user.get(sessionManger.SCLNAME);
-        String clasName = user.get(sessionManger.CLAS);
-        String photo=user.get(sessionManger.PHOTO);
 
-
-      //  imView.setImageURI(Uri.parse(to));
-//
-//        if(to!="NA") {
-            Glide.with(NewProfile.this).load(photo).into(imView);
-//        }
-//
-//        else
-//        {
-//            imView.setImageResource(R.drawable.man);
-//        }
-       name.setText(Ename);
-       this.mobile.setText(mobile);
-       className.setText(clasName);
-      this.sclName.setText("SID: "+user.get(sessionManger.SID));
-      this.bio.setText(Ebio);
-       email.setText(Eemail);
-//        sid.setText(Esid);
-//        bio.setText(Ebio);
-        getId=Esid;
         //imageView.setImageURI(Uri.parse(Photo));
+        profileData();
+
 
         logut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NewProfile.this);
-                alertDialogBuilder.setMessage("Are you sure, You wanted to Logout");
+                alertDialogBuilder.setMessage("Are you sure, You want to logout");
                         alertDialogBuilder.setPositiveButton("Yes",
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -285,6 +265,43 @@ public class NewProfile extends AppCompatActivity {
         startActivity(i);
     }
 
+
+
+    public void profileData() {
+
+    if (user != null) {
+        String Ename = user.get(sessionManger.NAME);
+        String Elastname = user.get(sessionManger.LASTNAME);
+        String Eemail = user.get(sessionManger.EMAIL);
+        String Esid = user.get(sessionManger.SID);
+        String Ebio = user.get(sessionManger.BIO);
+        String mobile = user.get(sessionManger.MOBILE);
+        String sclName = user.get(sessionManger.SCLNAME);
+        String clasName = user.get(sessionManger.CLAS);
+        String photo = user.get(sessionManger.PHOTO);
+
+
+        //  imView.setImageURI(Uri.parse(to));
+//
+
+        Glide.with(NewProfile.this).load(photo).apply(option).into(imView);
+
+//
+//        else
+//        {
+//            imView.setImageResource(R.drawable.man);
+//        }
+        name.setText(Ename+" "+Elastname);
+        this.mobile.setText(mobile);
+        className.setText(clasName);
+        this.sclName.setText("SID: " + user.get(sessionManger.SID));
+        this.bio.setText(Ebio);
+        email.setText(Eemail);
+//        sid.setText(Esid);
+//        bio.setText(Ebio);
+        getId = Esid;
+    }
+}
 
 }
 

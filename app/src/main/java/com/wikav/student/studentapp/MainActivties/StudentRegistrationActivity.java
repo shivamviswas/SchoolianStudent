@@ -2,6 +2,7 @@ package com.wikav.student.studentapp.MainActivties;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 
 import org.json.JSONArray;
@@ -36,27 +38,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StudentRegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    String[] items = new String[]{"Select Class","10","11", "12"};
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     List<String> clsases;
     ArrayAdapter<String> dataAdapter;
     String selectedClassId=null,sclid=null;
     Spinner spinner;
-    private final String JSON_URL = "http://schoolian.website/android/getClasses.php";
-    boolean isSetInitialText=true;
+    private final String JSON_URL = "https://schoolian.website/android/getClasses.php";
+    private final String Url="https://schoolian.website/android/reg2.php";
+    boolean isSetInitialText=true,isPhone=false,isSetInitialText2=true;
     private EditText school_id,name,lastname,email, pass,phone,clas;
     private ProgressBar progressBar;
     private Button submit;
-    Character ch;
-    Integer cha;
-      // private String Url="http://192.168.43.188/android/reg2.php",getClasss;
-       private String Url="http://schoolian.website/android/reg2.php";
+    TextInputLayout scl_idError;
+      // private String Url="https://192.168.43.188/android/reg2.php",getClasss;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_student_registration );
+        Config config=new Config(this);
+
+        config.CheckConnection();
         Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
 
@@ -67,6 +72,7 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
         }
 
         school_id=findViewById(R.id.school_id);
+        scl_idError=findViewById(R.id.scliderror);
         name = findViewById(R.id.sname);
         lastname=findViewById(R.id.lastname);
         email=findViewById(R.id.semail);
@@ -90,19 +96,19 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
             public void onTextChanged(CharSequence s, int start, int before, int count) {
              // sclid=school_id.getText().toString();
 
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (isSetInitialText){
                     isSetInitialText = false;
+                    scl_idError.setErrorEnabled(false);
                 } else{
                     // perform your operation
                     sclid=school_id.getText().toString();
-                    if(sclid.length()==8)
+                    if(sclid.length()>=8)
                     {
-                        Toast.makeText(StudentRegistrationActivity.this, sclid, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(StudentRegistrationActivity.this, sclid, Toast.LENGTH_SHORT).show();
                         getClasses(sclid);
                     }
 
@@ -111,52 +117,97 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
             }
         });
 
+//        phone.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if (isSetInitialText2) {
+//                    isSetInitialText2 = false;
+//                } else {
+//                    String ss = phone.getText().toString();
+//             StringBuilder stringBuffer=new StringBuilder(ss);
+//                    if (ss.length()>9)
+//                    {
+//                        if (stringBuffer.charAt(0) > 6) {
+//                            isPhone = true;
+//                        }
+//                        else
+//                        {
+//                            isSetInitialText2 = true;
+//                        }
+//                    }
+//
+//                }
+//            }
+//        });
+
     }
+
 
     public void submit(View view) {
         final String name=this.name.getText().toString();
         final String school_id=this.school_id.getText().toString();
         final String lastname=this.lastname.getText().toString();
-        final String phone=this.phone.getText().toString();
-
+        final String phone=this.phone.getText().toString().trim();
         final String email=this.email.getText().toString();
         final String pass=this.pass.getText().toString();
 
+        if(!name.equals("")&&!school_id.equals("")&&!lastname.equals("")&&!phone.equals("")&& !email.equals("")&&!pass.equals("")&&!selectedClassId.equals("Select Class")&&selectedClassId!=null){
+         //   Toast.makeText(this, "True main", Toast.LENGTH_SHORT).show();
 
-        if(!email.isEmpty()&&!pass.isEmpty()&&!selectedClassId.equals("Select Class")&&selectedClassId!=null
-                &&!lastname.isEmpty()&&!lastname.isEmpty()&&!school_id.isEmpty()){
-            int charAt = phone.charAt(0);
-            if(email.matches(emailPattern)) {
-                // Toast.makeText(StudentRegistrationActivity.this,"ehhe",Toast.LENGTH_LONG).show();
-                if((isValidPhoneNumber(phone))) {
-                    submitMethod(name, school_id, lastname, phone, email, pass, selectedClassId);
+            if(emailValidator(email))
+            {
+                //Toast.makeText(this, "True email", Toast.LENGTH_SHORT).show();
+               StringBuilder ch =new StringBuilder(phone);
+               // int kk=ch.charAt(0);
+                if(ch.charAt(0)=='6'||ch.charAt(0)=='7'||ch.charAt(0)=='8'||ch.charAt(0)=='9')
+                {
+                    if(phone.length()>9)
+                    {
+                        submitMethod(name, school_id, lastname, phone, email, pass, selectedClassId);
+                    }
+                    else
+                    {
+                        this.phone.setError("Please Enter Valid Mobile No.");
+                    }
+                  //  submitMethod(name, school_id, lastname, phone, email, pass, selectedClassId);
+                   // Toast.makeText(this, "Call Response" + kk, Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    this.phone.setError("Plaese Fill All fields");
-
+                else
+                {
+                    this.phone.setError("Please Enter Valid Phone");
                 }
-
+            }
+            else
+            {
+                this.email.setError("Please Enter Valid Email");
             }
 
-            else {
-                this.email.setError("Plaese Fill All fields");
-            }
-
-        }else{
-            this.name.setError("Plaese Fill All fields");
-            this.school_id.setError("Plaese Fill All fields");
-            this.lastname.setError("Plaese Fill All fields");
-            this.phone.setError("Plaese Fill All fields");
-            this.email.setError("Plaese Fill All fields");
-            // this.clas.setError("Plaese Fill All fields");
-            this.pass.setError("Plaese Fill All fields");
-
-            this.email.setError("Plaese Fill valid email");
-
+        }
+        else
+        {
+            this.name.setError("Please Fill All fields");
+            this.school_id.setError("Please Fill All fields");
+            this.lastname.setError("Please Fill All fields");
+            this.phone.setError("Please Fill All fields");
+            this.email.setError("Please Fill All fields");
+            this.pass.setError("Please Fill All fields");
         }
 
 
     }
+
+
+
 
     private void submitMethod(final String name, final String school_id, final String lastname, final String phone, final String email, final String pass, final String clas) {
 
@@ -171,7 +222,7 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
                     String success = jsonObject.getString("success");
                     if (success.equals("1"))
                     {
-                        Toast.makeText(StudentRegistrationActivity.this, "Email Already Exist",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentRegistrationActivity.this, "Mobile No. Already Exist",Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                         submit.setVisibility(View.VISIBLE);
                     }
@@ -188,11 +239,16 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
                         Toast.makeText(StudentRegistrationActivity.this, "Invalid School Id! Please Enter Valid Id",Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         submit.setVisibility(View.VISIBLE);
+                    }else if (success.equals("0"))
+                    {
+                        Toast.makeText(StudentRegistrationActivity.this, "Connection Error Please check the connection",Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                        submit.setVisibility(View.VISIBLE);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                   // Toast.makeText(StudentRegistrationActivity.this, "Register Error"+e.toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(StudentRegistrationActivity.this, "Register Error"+e.toString(),Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                     submit.setVisibility(View.VISIBLE);
                 }
@@ -204,7 +260,7 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                       // Toast.makeText(StudentRegistrationActivity.this, "Register Error 2:"+error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(StudentRegistrationActivity.this, "Register Error 2:"+error.toString(),Toast.LENGTH_LONG).show();
 
                         progressBar.setVisibility(View.GONE);
                         submit.setVisibility(View.VISIBLE);
@@ -300,6 +356,12 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
                         }
                         setAdapterMethod(clsases);
                     }
+                    else
+                    {
+                       scl_idError.setError("Please Enter Valid School Id");
+                       school_id.setText("");
+                       isSetInitialText=true;
+                    }
 
 
                 } catch (JSONException e) {
@@ -329,8 +391,13 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
 
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue requestQueue = Volley.newRequestQueue(StudentRegistrationActivity.this);
         requestQueue.add(stringRequest);
+
 
     }
 
@@ -343,11 +410,15 @@ public class StudentRegistrationActivity extends AppCompatActivity implements Ad
         spinner.setAdapter(dataAdapter);
 
     }
-    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            return Patterns.PHONE.matcher(phoneNumber).matches();
-        }
-        return false;
+
+    public boolean emailValidator(String email)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
 

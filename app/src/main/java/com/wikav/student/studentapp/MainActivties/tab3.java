@@ -14,12 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 import com.wikav.student.studentapp.adapters.AdapterForSyllabus;
@@ -43,7 +45,7 @@ public class tab3 extends Fragment {
     private List<Syllabus> lstAnime ;
     private RecyclerView recyclerView ;
     ProgressBar progressBar;
-    private final String JSON_URL = "http://schoolian.website/android/sallybus.php" ;
+    private final String JSON_URL = "https://schoolian.website/android/sallybus.php" ;
 
 
     @Override
@@ -55,7 +57,9 @@ public class tab3 extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.tab3,container,false);
+        Config config=new Config(getActivity());
 
+        config.CheckConnection();
         sessionManger=new SessionManger(context);
         HashMap<String, String> user=sessionManger.getUserDetail();
         String Esclid = user.get(sessionManger.SCL_ID);
@@ -133,6 +137,10 @@ public class tab3 extends Fragment {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
     }
     private void setuprecyclerview(List<Syllabus> userPostsList) {

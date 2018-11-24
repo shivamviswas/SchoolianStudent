@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -49,9 +50,10 @@ public class Spash_Screen extends AppCompatActivity {
        ImageView retry,logopic,sclfont;
        TextView tapto, pst;
     AlertDialog.Builder builder;
-    private final String uplod="http://schoolian.website/android/getAppUpdate.php";
-    private final String URL_PRODUCTS = "http://schoolian.website/android/getPostData.php";
-    private final String URL = "http://schoolian.website/android/login.php";
+Config    config;
+    private final String uplod="https://schoolian.website/android/getAppUpdate.php";
+    private final String URL_PRODUCTS = "https://schoolian.website/android/getPostData.php";
+    private final String URL = "https://schoolian.website/android/login.php";
     public  static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
 
 
@@ -70,23 +72,7 @@ public class Spash_Screen extends AppCompatActivity {
         sessionManger = new SessionManger(this);
         progressBar = findViewById(R.id.progressBar);
 
-        logopic.animate().translationYBy(-200f).setDuration(1500);
 
-        new Handler().postDelayed(new Runnable() {
-
-// Using handler with postDelayed called runnable run method
-
-            @Override
-
-            public void run() {
-
-                sclfont.animate().alpha(1f).setDuration(2500);
-                pst.animate().alpha(1f).setDuration(2500);
-
-
-            }
-
-        }, 3*1000);
 
 
       //  Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
@@ -94,7 +80,37 @@ public class Spash_Screen extends AppCompatActivity {
 //        Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
 //        pst.startAnimation(animation1);
      //  logopic.animate().alpha(1f);
-        updateApp();
+
+        config=new Config(this);
+
+        if(config.haveNetworkConnection())
+        {
+            logopic.animate().translationYBy(-200f).setDuration(1200);
+
+            new Handler().postDelayed(new Runnable() {
+
+// Using handler with postDelayed called runnable run method
+
+                @Override
+
+                public void run() {
+
+                    sclfont.animate().alpha(1f).setDuration(1500);
+                    pst.animate().alpha(1f).setDuration(1500);
+
+
+                }
+
+            }, 1*1000);
+            updateApp();
+        }
+        else
+        {
+            Intent intent =new Intent(this,NoInternetActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
 //        int Permission_All = 1;
 //
@@ -170,95 +186,10 @@ public class Spash_Screen extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-       checkAndroidVersion();
+
 
     }
 
-    private void checkAndroidVersion() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermission();
-
-        } else {
-          //  Toast.makeText(this, "Starting...", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(Spash_Screen.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat
-                .checkSelfPermission(Spash_Screen.this,
-                        Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale
-                    (Spash_Screen.this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale
-                            (Spash_Screen.this, Manifest.permission.CAMERA)) {
-
-                Snackbar.make(Spash_Screen.this.findViewById(android.R.id.content),
-                        "Please Grant Permissions to upload profile photo",
-                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                        new View.OnClickListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onClick(View v) {
-                                requestPermissions(
-                                        new String[]{Manifest.permission
-                                                .READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
-                                        PERMISSIONS_MULTIPLE_REQUEST);
-                            }
-                        }).show();
-            } else {
-                requestPermissions(
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.MEDIA_CONTENT_CONTROL,
-                                Manifest.permission.INTERNET,
-                                Manifest.permission.ACCESS_NETWORK_STATE},
-                        PERMISSIONS_MULTIPLE_REQUEST);
-            }
-        } else {
-            // write your logic code if permission already granted
-           // Toast.makeText(this, "Permission Granted...", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-            case PERMISSIONS_MULTIPLE_REQUEST:
-                if (grantResults.length > 0) {
-                    boolean cameraPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean readExternalFile = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                    if(cameraPermission && readExternalFile)
-                    {
-                        // write your logic here
-                    } else {
-                        Snackbar.make(Spash_Screen.this.findViewById(android.R.id.content),
-                                "Please Grant Permissions to upload profile photo",
-                                Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            requestPermissions(
-                                                    new String[]{Manifest.permission
-                                                            .READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
-                                                    PERMISSIONS_MULTIPLE_REQUEST);
-                                        }
-                                    }
-                                }).show();
-                    }
-                }
-                break;
-        }
-    }
 
 
 
@@ -292,69 +223,8 @@ public class Spash_Screen extends AppCompatActivity {
 //        finish();
 //    }
 
-    private boolean haveNetworkConnection() {
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
-
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        return haveConnectedWifi || haveConnectedMobile;
-    }
 
 
-    public void retry(View view) {
-/*
-        retry.setVisibility(View.GONE);
-        tapto.setVisibility(View.GONE);
-        logopic.setVisibility(View.VISIBLE);
-        pst.setVisibility(View.VISIBLE);
-
-
-        if (haveNetworkConnection()) {
-
-            progressBar.setVisibility(View.VISIBLE);
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        sleep(3000);
-
-
-                        if (!sessionManger.isLoging()) {
-                            Intent intent = new Intent(Spash_Screen.this, Login.class);
-                            startActivity(intent);
-                        } else {
-
-                            Intent intent = new Intent(Spash_Screen.this, HomeMenuActivity.class);
-                            startActivity(intent);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            };
-            thread.start();
-
-        }
-        else {
-
-            retry.setVisibility(View.VISIBLE);
-            tapto.setVisibility(View.VISIBLE);
-            logopic.setVisibility(View.GONE);
-            pst.setVisibility(View.GONE);
-        }
-
-    }*/
-    }
 
     public void updateApp(){
         progressBar.setVisibility(View.VISIBLE);
@@ -413,6 +283,10 @@ public class Spash_Screen extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 
     }
@@ -430,7 +304,7 @@ public class Spash_Screen extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(Spash_Screen.this, "Updating...", Toast.LENGTH_SHORT).show();
-                String url = "http://"+link;
+                String url = "https://"+link;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -446,31 +320,7 @@ public class Spash_Screen extends AppCompatActivity {
     else {
 
         progressBar.setVisibility(View.VISIBLE);
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    sleep(5000);
-//
-//
-//                    if (!sessionManger.isLoging()) {
-//                        String s=SessionManger.SCL_ID;
-//                        demofeed(s);
-//                        Intent intent = new Intent(Spash_Screen.this, Login.class);
-//                        startActivity(intent);
-//
-//                    } else {
-//
-//                        Intent intent = new Intent(Spash_Screen.this, HomeMenuActivity.class);
-//                        startActivity(intent);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        };
-//        thread.start();
+
 
             new Handler().postDelayed(new Runnable() {
 
@@ -482,9 +332,7 @@ public class Spash_Screen extends AppCompatActivity {
 
                    // Toast.makeText(Spash_Screen.this, "work", Toast.LENGTH_SHORT).show();
                     if (!sessionManger.isLoging()) {
-                        String s=SessionManger.SCL_ID;
 
-                        demofeed(s);
                        // Toast.makeText(Spash_Screen.this, "work2", Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(Spash_Screen.this, Login.class);
@@ -502,50 +350,13 @@ public class Spash_Screen extends AppCompatActivity {
 
                 }
 
-            }, 5*1000);
+            }, 2*1000);
 
         }
 
     }
 
-    private void demofeed(final String id) {
 
-
-        //showProgress();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PRODUCTS, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                //stopProgressBar();
-                SessionManger.putString(Spash_Screen.this, SessionManger.HOME_FEED_KEY, response);
-
-
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(HomeMenuActivity.this, "Error 2: " + error.toString(), Toast.LENGTH_LONG).show();
-//                        button.setVisibility(View.VISIBLE);
-//                        progressBar.setVisibility(View.GONE);
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> param = new HashMap<>();
-                param.put("school_id", id);
-
-                return param;
-
-            }
-        };
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        requestQueue.add(stringRequest);
-        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-
-    }
 
 
 }

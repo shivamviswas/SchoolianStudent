@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.wikav.student.studentapp.MainActivties.HomeMenuActivity;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
@@ -48,9 +49,9 @@ public class AnimeActivity extends AppCompatActivity {
 
 
     private RecyclerView.LayoutManager layoutManager;
-    private final String JSON_URL = "http://schoolian.website/android/getComments.php" ;
-    private final String JSON_URL2 ="http://schoolian.website/android/comments.php" ;
-    private final String Delete_URL ="http://schoolian.website/android/deletePost.php" ;
+    private final String JSON_URL = "https://schoolian.website/android/getComments.php" ;
+    private final String JSON_URL2 ="https://schoolian.website/android/comments.php" ;
+    private final String Delete_URL ="https://schoolian.website/android/deletePost.php" ;
     private JsonArrayRequest request ;
 
     private List<CommentAnime> lstAnime ;
@@ -94,7 +95,7 @@ public class AnimeActivity extends AppCompatActivity {
 ////        TextView tv_categorie = findViewById(R.id.aa_categorie) ;
 ////        TextView tv_description = findViewById(R.id.aa_description);
         TextView tv_rating  = findViewById(R.id.starGeti) ;
-      ImageView img = findViewById(R.id.thumbnail_on);
+      PhotoView img = findViewById(R.id.thumbnail_on);
         CircleImageView prof=findViewById(R.id.profile_pic_on);
 //
 //        // setting values to each view
@@ -107,10 +108,25 @@ public class AnimeActivity extends AppCompatActivity {
 
        RequestOptions requestOptions = new RequestOptions().centerCrop().placeholder(R.drawable.loading_shape).error(R.drawable.loading_shape);
         // set image using Glide
-        Glide.with(this).load(postPic).into(img);
+        if(postPic.equals("")||postPic.equals("NA"))
+        {
+            img.setMaxHeight(0);
+            img.setVisibility(View.GONE);
+
+        }
+        else
+        {
+            img.setVisibility(View.VISIBLE);
+
+            Glide.with(this).load(postPic).into(img);
+        }
         Glide.with(this).load(proPic).into(prof);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerviewComment);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         lstAnime = new ArrayList<>();
 
         sessionManger=new SessionManger(this);
@@ -196,9 +212,7 @@ public class AnimeActivity extends AppCompatActivity {
     }
 
     private void setuprecyclerview(List<CommentAnime> userPostsList) {
-
-
-        AdapterForComment adaptorRecycler = new AdapterForComment(this,lstAnime) ;
+ AdapterForComment adaptorRecycler = new AdapterForComment(this,lstAnime) ;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adaptorRecycler);
 
@@ -210,12 +224,12 @@ public class AnimeActivity extends AppCompatActivity {
 
 
 
-    @Override
+  /*  @Override
     public void onBackPressed() {
 
         Intent intent =new Intent(AnimeActivity.this, HomeMenuActivity.class);
         startActivity(intent);
-    }
+    }*/
 
     public void deletEdit(View view) {
 
@@ -291,11 +305,13 @@ public void respose()
 
     anime.setIdCom(" ");
         anime.setImage_url(Photo);
-    Toast.makeText(this, Photo, Toast.LENGTH_LONG).show();
+   // Toast.makeText(this, Photo, Toast.LENGTH_LONG).show();
 
         lstAnime.add(anime);
     setuprecyclerview(lstAnime);
 }
+
+
     private void setSendCom(final String anwser, final String posId,final String userId) {
         StringRequest stringRequest= new StringRequest(Request.Method.POST, JSON_URL2, new Response.Listener<String>() {
             @Override
@@ -303,9 +319,12 @@ public void respose()
                 try {
                     JSONObject jsonObject1=new JSONObject(response);
                     String success = jsonObject1.getString("success");
-
-                    Toast.makeText(AnimeActivity.this,"Sending...",Toast.LENGTH_LONG).show();
-                    sendCom.setText("");
+                    if(success.equals("1")) {
+                        sendCom.setText("");
+                        Toast.makeText(AnimeActivity.this, "Sending...", Toast.LENGTH_LONG).show();
+                        lstAnime.clear();
+                        shocoments(posId);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

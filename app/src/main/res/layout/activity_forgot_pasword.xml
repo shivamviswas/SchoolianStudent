@@ -41,6 +41,7 @@
                 android:drawableLeft="@drawable/ic_verified_user_black_24dp"
                 android:drawablePadding="10dp"
                 android:hint="Mobile"
+                android:maxLength="10"
                 android:inputType="phone"
                 app:backgroundTint="@color/colorPrimary"
                 />

@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.MySingleton;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
@@ -32,16 +33,18 @@ public class Login extends AppCompatActivity {
     TextView textView;
     EditText editTextemail, editTextpassword;
     private ProgressBar progressBar;
-   private final String URL = "http://schoolian.website/android/login.php";
+   private final String URL = "https://schoolian.website/android/login.php";
     SessionManger sessionManger;
     TextInputLayout pass_hint,email_hint;
-    //private final String URL = "http://192.168.43.188/android/login.php";
+    //private final String URL = "https://192.168.43.188/android/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Config config=new Config(this);
 
+        config.CheckConnection();
         button = findViewById(R.id.btn_login);
         textView = findViewById(R.id.link);
         progressBar = findViewById(R.id.progress);

@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:background="#FFF"
 
             >
 
@@ -32,20 +34,19 @@
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_pic_on_comment"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:elevation="5dp"
+
                 android:scaleType="centerCrop"
                 android:src="@drawable/man"
-                app:civ_border_color="#FFFFFFFF"
-                app:civ_border_width="3dp" />
+                app:civ_border_color="#000"
+                app:civ_border_width=".6dp" />
 
 
             <TextView

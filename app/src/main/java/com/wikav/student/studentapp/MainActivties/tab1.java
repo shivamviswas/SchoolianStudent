@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.MySingleton;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
@@ -34,7 +36,7 @@ import java.util.Map;
 public class tab1 extends Fragment {
 
     private RecyclerView.LayoutManager layoutManager;
-    private final String JSON_URL = "http://schoolian.website/android/subjects.php" ;
+    private final String JSON_URL = "https://schoolian.website/android/subjects.php" ;
     private JsonArrayRequest request ;
 
 
@@ -51,6 +53,9 @@ public class tab1 extends Fragment {
         HashMap<String, String> user=sessionManger.getUserDetail();
         String Esid = user.get(sessionManger.SCL_ID);
         String cls = user.get(sessionManger.CLAS);
+        Config config=new Config(getActivity());
+
+        config.CheckConnection();
         sclid=Esid;
         clls=cls;
         shocoments(sclid,clls);
@@ -119,6 +124,10 @@ public class tab1 extends Fragment {
         };
 //        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 //        requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
 

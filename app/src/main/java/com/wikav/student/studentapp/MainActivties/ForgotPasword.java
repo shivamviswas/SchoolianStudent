@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SendOtp;
 import com.wikav.student.studentapp.submitOtp;
@@ -37,19 +38,22 @@ int i;
     ProgressBar progressBar;
     TextInputLayout hint;
     Button send_otp;
-    private final String uplod="http://schoolian.website/android/sendOtp.php";
+    private final String uplod="https://schoolian.website/android/sendOtp.php";
 
    // SendOtp Otpsend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_pasword);
+        Config config=new Config(this);
+        config.CheckConnection();
         mobile=findViewById(R.id.mobileForget);
+
         progressBar=findViewById(R.id.progressForgot);
         hint=findViewById(R.id.forgetInput);
         send_otp=findViewById(R.id.send_otp);
         rnd = new Random();
-         i = rnd.nextInt(999999) + 100000;
+         i = rnd.nextInt(999999) + 90000;
         //Otpsend=new SendOtp();
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
@@ -60,8 +64,17 @@ int i;
 
     public void sendsOtp(View view) {
         Mobile=mobile.getText().toString().trim();
-        String msg="Your OTP is "+i+".Thank You.";
-UploadPicture(Mobile,msg);
+        if(!Mobile.isEmpty()&&!Mobile.equals("")&&Mobile.length()>9)
+        {
+            String msg="Your OTP is "+i+". Thank You.";
+            UploadPicture(Mobile,msg);}
+
+        else
+        {
+            hint.setError("Please Enter Registered OR Valid Mobile Number");
+
+
+        }
 
 
     }
@@ -92,6 +105,7 @@ UploadPicture(Mobile,msg);
                                     intent.putExtra("mobile", Mobile);
                                     intent.putExtra("otp", ""+i);
                                     startActivity(intent);
+                                    finish();
                                 }
 
                             }

@@ -3,15 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wikav.student.studentapp">
 
+    <uses-sdk
+        android:maxSdkVersion="27"
+        android:minSdkVersion="15"
+        android:targetSdkVersion="27" />
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
@@ -19,8 +23,7 @@
         android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,71 +32,66 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.wikav.student.studentapp.Spash_Screen"
+            android:name=".Spash_Screen"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"
-                    android:launchMode="singleInstance"/>
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:launchMode="singleInstance" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.Login"
-            android:noHistory="true" />
+            android:name=".MainActivties.Login" />
+
+        <activity android:name=".MainActivties.SubjectActivity_2" />
+        <activity android:name=".activities.AnimeActivity" />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.SubjectActivity_2"
-            />
-        <activity
-            android:name="com.wikav.student.studentapp.activities.AnimeActivity"
-            android:noHistory="true" />
-        <activity
-            android:name="com.wikav.student.studentapp.MainActivties.StudentRegistrationActivity"
+            android:name=".MainActivties.StudentRegistrationActivity"
             android:label="Register"
-            android:noHistory="true"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.HomeMenuActivity"
+            android:name=".MainActivties.HomeMenuActivity"
             android:label="@string/title_activity_home_menu"
-
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.Message_NevActivity"
-            android:noHistory="true" />
+            android:name=".MainActivties.Message_NevActivity"
+            />
         <activity
-            android:name="com.wikav.student.studentapp.ContactUs_NevActivity"
-            android:noHistory="true" />
+            android:name=".ContactUs_NevActivity"
+            />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.MyPost_NevActivity"
-            android:noHistory="true" />
+            android:name=".MainActivties.MyPost_NevActivity"
+       />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.Feedback_NevActivity"
-            android:noHistory="true" />
+            android:name=".MainActivties.Feedback_NevActivity"
+            />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.Schoolina_NevActivity"
-            android:noHistory="true" />
+            android:name=".MainActivties.Schoolina_NevActivity"
+            />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.Help_NevActivity"
-            android:noHistory="true" />
-        <activity
-            android:name="com.wikav.student.studentapp.MainActivties.NotificationActivity"
-            android:noHistory="true" />
-        <activity
-            android:name="com.wikav.student.studentapp.MainActivties.NewProfile"
+            android:name=".MainActivties.Help_NevActivity"
              />
         <activity
-            android:name="com.wikav.student.studentapp.MainActivties.feedUpload"
+            android:name=".MainActivties.NotificationActivity"
+             />
+        <activity android:name=".MainActivties.NewProfile" />
+        <activity android:name=".MainActivties.feedUpload" />
+        <activity
+            android:name=".EditProfile"
             android:noHistory="true" />
         <activity
-            android:name="com.wikav.student.studentapp.EditProfile"
-            android:noHistory="true" />
+            android:name=".Confirm_password_Activity"
+            />
         <activity
-            android:name="com.wikav.student.studentapp.Confirm_password_Activity"
-            android:launchMode="singleTop"/>
-        <activity android:name="com.wikav.student.studentapp.MainActivties.ForgotPasword" android:launchMode="singleTop" />
-        <activity android:name="com.wikav.student.studentapp.submitOtp"
-            android:launchMode="singleTop"></activity>
+            android:name=".MainActivties.ForgotPasword"
+            />
+        <activity
+            android:name=".submitOtp"
+            />
+        <activity android:name=".NoInternetActivity"></activity>
     </application>
 
 </manifest>

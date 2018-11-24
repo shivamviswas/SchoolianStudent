@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,10 +18,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 import com.wikav.student.studentapp.adapters.RecyclerViewAdapterUser;
-import com.wikav.student.studentapp.model.Animes;
+import com.wikav.student.studentapp.model.Anime;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +35,9 @@ import java.util.Map;
 
 public class MyPost_NevActivity extends AppCompatActivity {
    // GridView androidGridView;
-   private List<Animes> lstAnime;
+   private List<Anime> lstAnime;
 
-    private String school_id="1",sid="24";
+    private String school_id,sid;
     private RecyclerView recyclerView;
 
     private SwipeRefreshLayout swipeRefresh;
@@ -44,26 +46,30 @@ public class MyPost_NevActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     SessionManger sessionManger;
-    private final String URL_PRODUCTS = "http://schoolian.website/android/getPostData.php";
-    //private final String URL_PRODUCTS = "http://192.168.43.188/android/getUserPost.php";
+    private final String URL_PRODUCTS = "https://schoolian.website/android/getUserPost.php";
+    //private final String URL_PRODUCTS = "httpss://192.168.43.188/android/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.my_post);
-        swipeRefresh = findViewById(R.id.userPostSwipe);
+        Config config=new Config(this);
 
-//        HashMap<String, String> user = sessionManger.getUserDetail();
-//        String Ename = user.get(sessionManger.SCL_ID);
-//        String id = user.get(sessionManger.SID);
-//        school_id = Ename;
-//        sid=id;
+        config.CheckConnection();
+        swipeRefresh = findViewById(R.id.userPostSwipe);
+sessionManger=new SessionManger(this);
+
+        HashMap<String, String> user = sessionManger.getUserDetail();
+        String Ename = user.get(sessionManger.SCL_ID);
+        String id = user.get(sessionManger.SID);
+        school_id = Ename;
+        sid=id;
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
                 //if internet is available
-
+                lstAnime.clear();
                 getUserPost(school_id,sid);
                 //else
                 //swipe_refresh.setRefreshing(false);
@@ -101,7 +107,7 @@ public class MyPost_NevActivity extends AppCompatActivity {
     private void parseHomeFeed(String response) throws JSONException {
 
         // stopProgressBar();
-
+       // Toast.makeText(this, "call hogya", Toast.LENGTH_SHORT).show();
         JSONObject jsonObject1 = new JSONObject(response);
         String success = jsonObject1.getString("success");
         JSONArray jsonArray = jsonObject1.getJSONArray("userPost");
@@ -109,15 +115,15 @@ public class MyPost_NevActivity extends AppCompatActivity {
         if (success.equals("1")) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Animes anime = new Animes();
+                Anime anime = new Anime();
                 anime.setName(jsonObject.getString("st_name"));
 //                        anime.setDescription(jsonObject.getString("description"));
-                anime.setRating(jsonObject.getString("stars"));
-                anime.setCategorie(jsonObject.getString("posts"));
-                anime.setId(jsonObject.getString("post_id"));
-                anime.setStudio(jsonObject.getString("profile_pic"));
+                anime.setStars(jsonObject.getString("stars"));
+                anime.setPosts(jsonObject.getString("posts"));
+                anime.setPostId(jsonObject.getString("post_id"));
+                anime.setProfilePic(jsonObject.getString("profile_pic"));
                 anime.setImage_url(jsonObject.getString("post_pic"));
-                lstAnime.add(anime);
+                anime.setTime(jsonObject.getString("time")); lstAnime.add(anime);
             }
             setuprecyclerview(lstAnime);
     }
@@ -182,20 +188,20 @@ public class MyPost_NevActivity extends AppCompatActivity {
 
     }
 
-    private void setuprecyclerview(List<Animes> userPostsList) {
+    private void setuprecyclerview(List<Anime> userPostsList) {
 
         adaptorRecycler = new RecyclerViewAdapterUser(this, userPostsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adaptorRecycler);
 
-        /*if(adaptorRecycler == null) {
-            adaptorRecycler = new RecyclerViewAdapterUser(this, userPostsList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(adaptorRecycler);
-        } else {
-            adaptorRecycler.changeDataSet(userPostsList);
-            adaptorRecycler.notifyDataSetChanged();
-        }*/
+//        if(adaptorRecycler == null) {
+//            adaptorRecycler = new RecyclerViewAdapterUser(this, userPostsList);
+//            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//            recyclerView.setAdapter(adaptorRecycler);
+//        } else {
+//            adaptorRecycler.changeDataSet(userPostsList);
+//            adaptorRecycler.notifyDataSetChanged();
+//        }
 
         if(swipeRefresh.isRefreshing()) {
             swipeRefresh.setRefreshing(false);

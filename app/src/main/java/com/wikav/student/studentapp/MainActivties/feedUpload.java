@@ -29,12 +29,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.student.studentapp.Config;
+import com.wikav.student.studentapp.MySingleton;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
 //import com.android.volley.request.SimpleMultiPartRequest;
@@ -43,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,11 +59,14 @@ public class feedUpload extends AppCompatActivity {
     public String getId,scl_Id;
     Bitmap bitmap,thumbnail;
     int i=0;
-    String uplod="http://schoolian.website/android/post_upload.php";
+    String uplod="https://schoolian.website/android/post_upload.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_upload);
+        Config config=new Config(this);
+
+        config.CheckConnection();
         viewImage=(ImageView)findViewById(R.id.postImage2);
         uploadBtn= findViewById(R.id.postUp);
         imageSelect=findViewById(R.id.choosIm);
@@ -169,29 +176,28 @@ public class feedUpload extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
     }
 
 /////////////////////////////////////////////////////////////// UPLOAD ONLY TEXT//////////////////////////////////////////////////////////////////////////////////
 
     private void UploadOnlyWrite(final String id, final String et) {
-        final String BLANK="";
+        final String BLANK="NA";
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Uploading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         feedUpload.this.setFinishOnTouchOutside(false);
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, uplod,
+         StringRequest stringRequest = new StringRequest(Request.Method.POST, uplod,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
-                        Log.i("TAG", response.toString());
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
@@ -227,9 +233,11 @@ public class feedUpload extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
 
     }
@@ -274,8 +282,19 @@ public class feedUpload extends AppCompatActivity {
 
                 {
 
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
+//                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                    startActivityForResult(intent, 2);
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                    intent.setType("image/*");
+//                    intent.putExtra("crop", "true");
+//                    intent.putExtra("scale", true);
+//                    intent.putExtra("outputX", 256);
+//                    intent.putExtra("outputY", 256);
+//                    intent.putExtra("aspectX", 1);
+//                    intent.putExtra("aspectY", 1);
+//                    intent.putExtra("return-data", true);
                     startActivityForResult(intent, 2);
 
 
@@ -309,118 +328,49 @@ public class feedUpload extends AppCompatActivity {
             if (requestCode == 1) {
                 Bundle extras = data.getExtras();
                thumbnail = (Bitmap) extras.get("data");
-                //mImageView.setImageBitmap(imageBitmap);
-
-
-//                File f = new File(Environment.getExternalStorageDirectory().toString());
-//
-//                for (File temp : f.listFiles()) {
-//
-//                    if (temp.getName().equals("temp.jpg")) {
-//
-//                        f = temp;
-//
-//                        break;
-//                    }
-//
-//                }
-//
-//                try {
-//
-//
-//
-//                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-//
-//
-//
-//                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-//
-//                            bitmapOptions);
-//
-//                    // UploadPicture(getId, getStringImage(bitmap));
-                    viewImage.setVisibility(View.VISIBLE);
+                  viewImage.setVisibility(View.VISIBLE);
                     imageSelect.setVisibility(View.GONE);
                     imageButton.setVisibility(View.VISIBLE);
                          viewImage.setImageBitmap(thumbnail);
                         i=1;
-//
-//
-//
-//                    String path = android.os.Environment
-//
-//                            .getExternalStorageDirectory()
-//
-//                            + File.separator
-//
-//                            + "Phoenix" + File.separator + "default";
-//
-//                    f.delete();
-//
-//                    OutputStream outFile = null;
-//
-//                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-//
-//                    try {
-//
-//                        outFile = new FileOutputStream(file);
-//
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-//
-//                        outFile.flush();
-//
-//                        outFile.close();
-//
-//
-//                    } catch (FileNotFoundException e) {
-//
-//                        e.printStackTrace();
-//
-//                    } catch (IOException e) {
-//
-//                        e.printStackTrace();
-//
-//                    } catch (Exception e) {
-//
-//                        e.printStackTrace();
-//
-//                    }
-//
-//                } catch (Exception e) {
-//
-//                    e.printStackTrace();
-//
-//                }
 
             }
 
             else if (requestCode == 2) {
 
-
-
                 Uri selectedImage = data.getData();
 
-                String[] filePath = { MediaStore.Images.Media.DATA };
+//                String[] filePath = { MediaStore.Images.Media.DATA };
+//
+//                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+//
+//                c.moveToFirst();
+//
+//                int columnIndex = c.getColumnIndex(filePath[0]);
+//
+//                String picturePath = c.getString(columnIndex);
+//
+//                c.close();
+//                final Bundle extras = data.getExtras();
+//
+//                    //Get image
+//                    thumbnail = (Bitmap) extras.get("data");
 
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+                try {
+                    thumbnail= MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                    viewImage.setVisibility(View.VISIBLE);
+                    imageSelect.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.VISIBLE);
+                    viewImage.setImageBitmap(thumbnail);
+                    viewImage.setRotation(0);
+                    i=1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                c.moveToFirst();
 
-                int columnIndex = c.getColumnIndex(filePath[0]);
+               // thumbnail = (BitmapFactory.decodeFile(picturePath));
 
-                String picturePath = c.getString(columnIndex);
-
-                c.close();
-
-               thumbnail = (BitmapFactory.decodeFile(picturePath));
-
-                // Log.w("path of image from gallery......******************.........", picturePath+"");
-
-                //UploadPicture(getId, getStringImage(thumbnail));
-                viewImage.setVisibility(View.VISIBLE);
-                imageSelect.setVisibility(View.GONE);
-                imageButton.setVisibility(View.VISIBLE);
-                viewImage.setImageBitmap(thumbnail);
-                i=1;
 
             }
 
@@ -478,8 +428,11 @@ public class feedUpload extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
 
     }
@@ -487,7 +440,7 @@ public class feedUpload extends AppCompatActivity {
     public String getStringImage(Bitmap bitmap){
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
 
         byte[] imageByteArray = byteArrayOutputStream.toByteArray();
         String encodedImage = Base64.encodeToString(imageByteArray, Base64.DEFAULT);

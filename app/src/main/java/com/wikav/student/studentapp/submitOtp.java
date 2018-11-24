@@ -34,7 +34,7 @@ public class submitOtp extends AppCompatActivity {
     ProgressBar progressBar;
     TextInputLayout hint;
     Button submit_otp;
-    private final String uplod="http://schoolian.website/android/sendOtp.php";
+    private final String uplod="https://schoolian.website/android/sendOtp.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +59,24 @@ public class submitOtp extends AppCompatActivity {
 
     public void subOtp(View view) {
         String enter=enterOtp.getText().toString().trim();
-        if(enter.equals(otp)){
-            Intent intent = new Intent(submitOtp.this, Confirm_password_Activity.class);
-            intent.putExtra("mobile", mobile);
-            //intent.putExtra("otp", ""+i);
-            startActivity(intent);
+        if(!enter.equals("")&&!enter.isEmpty()) {
+            if (enter.equals(otp)) {
+                Intent intent = new Intent(submitOtp.this, Confirm_password_Activity.class);
+                intent.putExtra("mobile", mobile);
+                //intent.putExtra("otp", ""+i);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                hint.setError("Invalid OTP");
+                //Toast.makeText(this, "not Work", Toast.LENGTH_SHORT).show();
+            }
         }
+
         else
         {
-            hint.setError("Invalid OTP");
+            hint.setError("Please Enter OTP");
             //Toast.makeText(this, "not Work", Toast.LENGTH_SHORT).show();
         }
     }

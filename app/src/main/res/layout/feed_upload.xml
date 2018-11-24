@@ -19,13 +19,12 @@
 
     <ImageView
         android:id="@+id/postImage2"
-        android:layout_width="340dp"
+        android:layout_width="match_parent"
         android:layout_height="320dp"
         android:layout_below="@+id/postText"
-        android:layout_alignLeft="@+id/postText"
-        android:layout_alignStart="@+id/postText"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="30dp"
         android:visibility="gone"
+
         />
 
     <RelativeLayout
