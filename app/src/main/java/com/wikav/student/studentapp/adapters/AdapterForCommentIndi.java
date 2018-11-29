@@ -25,8 +25,11 @@ import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.model.CommentAnime;
 import com.wikav.student.studentapp.model.CommentModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -75,15 +78,16 @@ firebaseFirestore=FirebaseFirestore.getInstance();
     public void onBindViewHolder(final MyViewHolder holder, int position) {
             holder.comments.setText(myData.get(position).getComment());
         holder.setIsRecyclable(false);
-//            try {
-//                long millisecond = myData.get(position).getTimeStamp().getTime();
-//                String dateString = DateFormat.format("MM/dd/yyyy", new Date(millisecond)).toString();
-//                holder.time.setText(dateString);
-//            }catch (Exception e) {
-//
-//                Toast.makeText(mContext, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//            }
+            try {
+                long millisecond = myData.get(position).getTimeStamp().getTime();
+                String dateString = DateFormat.format("MM/dd/yyyy", new Date(millisecond)).toString();
+                holder.time.setText(dateString);
+            }catch (Exception e) {
+
+               /// Toast.makeText(mContext, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+               String c= new SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(new Date());
+                holder.time.setText(c);
+            }
 
 
             String Userid=myData.get(position).getUser_id();
@@ -98,7 +102,7 @@ firebaseFirestore=FirebaseFirestore.getInstance();
                     String userImage = task.getResult().getString("Profile_Pic");
 
                    holder.Username.setText(userName);
-                    Glide.with(mContext).load(userImage).apply(option).thumbnail(.5f).into(holder.profileImage);
+                    Glide.with(mContext).load(userImage).apply(option).thumbnail(.3f).into(holder.profileImage);
 
 
                 } else {

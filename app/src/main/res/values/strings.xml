@@ -152,4 +152,8 @@
     </string>
     <string name="title_activity_demo">demo</string>
     <string name="title_activity_feed2">feedActivity2</string>
+
+    <string name="title_activity_post_view">"Post "</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

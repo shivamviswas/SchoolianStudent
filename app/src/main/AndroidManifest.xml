@@ -79,7 +79,12 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".individual.SetProfileActivity" />
-        <activity android:name=".individual.CommentActivity"></activity>
+        <activity android:name=".individual.CommentActivity" />
+        <activity
+            android:name=".individual.PostViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_post_view"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

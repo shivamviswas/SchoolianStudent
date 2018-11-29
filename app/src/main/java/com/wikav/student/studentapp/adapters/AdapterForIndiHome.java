@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -23,17 +22,21 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.wikav.student.studentapp.MainActivties.Login;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.individual.CommentActivity;
-import com.wikav.student.studentapp.individual.Ind_HomeActivity;
+import com.wikav.student.studentapp.individual.PostViewActivity;
 import com.wikav.student.studentapp.model.IndiHomeModel;
+import com.wikav.student.studentapp.model.UsersModel;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -50,14 +53,16 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
 
     private Context context;
     private List<IndiHomeModel> myData;
+    private List<UsersModel> myUserData;
     RequestOptions option;
     String ComId;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterForIndiHome(Context context, List<IndiHomeModel> myData) {
+    public AdapterForIndiHome(Context context, List<IndiHomeModel> myData, List<UsersModel> user_list) {
         this.context = context;
         this.myData = myData;
+        this.myUserData = user_list;
     }
 
     @NonNull
@@ -82,30 +87,15 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
         holder.setBlogImage(image,thumb);
         holder.setDescText(postText);
         final String currentUser=firebaseAuth.getCurrentUser().getUid();
-        String user_id = myData.get(position).getUserId();
+        final String user_id = myData.get(position).getUserId();
         //User Data will be retrieved here...
 
         if(firebaseAuth.getCurrentUser()!=null) {
-            firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                    if (task.isSuccessful()) {
-
-                        String userName = task.getResult().getString("Name");
-                        String userImage = task.getResult().getString("Profile_Pic");
-
-                        holder.setUserData(userName, userImage);
 
 
-                    } else {
-
-                        //Firebase Exception
-
-                    }
-
-                }
-            });
+            String userName = myUserData.get(position).getName();
+            String userImage = myUserData.get(position).getProfile_Pic();
+            holder.setUserData(userName, userImage);
 
                 long millisecond = myData.get(position).getTimeStamp().getTime();
                 String dateString = DateFormat.format("MM/dd/yyyy", new Date(millisecond)).toString();
@@ -116,6 +106,11 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
             firebaseFirestore.collection("Posts/" + postId + "/Likes").addSnapshotListener((Activity) context,new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if (e!=null)
+                    {
+                        Toast.makeText(context, "Firestore Error: " +e, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     if (!documentSnapshots.isEmpty()) {
 
@@ -133,11 +128,17 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
             });
 
 
+
             //Get Likes
             firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUser).addSnapshotListener((Activity) context,new EventListener<DocumentSnapshot>() {
                 @SuppressLint("NewApi")
                 @Override
                 public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                    if (e!=null)
+                    {
+                        Toast.makeText(context, "Firestore Error: " +e, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     if (documentSnapshot.exists()) {
 
@@ -156,27 +157,42 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
                 }
             });
 
-            firebaseFirestore.collection("Posts/" + postId + "/comments").document(currentUser).addSnapshotListener((Activity) context,new EventListener<DocumentSnapshot>() {
-                @SuppressLint("NewApi")
-                @Override
-                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
 
-                    if (documentSnapshot.exists()) {
+//            CollectionReference collectionReference=firebaseFirestore.collection("Posts/" + postId + "/comments");
+//
+//            collectionReference.whereEqualTo("user_id", user_id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                @SuppressLint("NewApi")
+//                @Override
+//                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+//
+//                    if (e!=null)
+//                    {
+//                        Toast.makeText(context, "Firestore Error: " +e, Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    if (documentSnapshots.size()>0) {
+//
+//
+//                        holder.blogCommentBtn.setImageDrawable(context.getDrawable(R.drawable.ic_commentred));
+//
+//
+//                    }
+//
+//                }
+//            });
 
 
-                        holder.blogCommentBtn.setImageDrawable(context.getDrawable(R.drawable.ic_commentred));
 
-
-                    }
-
-                }
-            });
 
             firebaseFirestore.collection("Posts/" + postId + "/comments").addSnapshotListener((Activity)context, new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot documentSnapshots,  FirebaseFirestoreException e) {
 
-                    assert documentSnapshots != null;
+                 if (e!=null)
+                 {
+                     Toast.makeText(context, "Firestore Error: " +e, Toast.LENGTH_SHORT).show();
+                     return;
+                 }
                     if (!documentSnapshots.isEmpty()) {
 
                         int count = documentSnapshots.size();
@@ -197,9 +213,12 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
                 @Override
                 public void onClick(View v) {
 
-                    firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUser).get().addOnCompleteListener((Activity) context,new OnCompleteListener<DocumentSnapshot>() {
+                    firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUser).get()
+                            .addOnCompleteListener((Activity) context,new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+
 
                             if (!task.getResult().exists()) {
 
@@ -224,6 +243,17 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
                 public void onClick(View v) {
                     Intent intent =new Intent(context, CommentActivity.class);
                     intent.putExtra("postId",postId);
+                    context.startActivity(intent);
+                }
+            });
+
+
+            holder.blogImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, PostViewActivity.class);
+                    intent.putExtra("postId",postId);
+                    intent.putExtra("userId",user_id);
                     context.startActivity(intent);
                 }
             });
@@ -316,7 +346,7 @@ public class AdapterForIndiHome extends RecyclerView.Adapter<AdapterForIndiHome.
 
             RequestOptions placeholderOption = new RequestOptions().placeholder(R.drawable.man);
 
-            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(blogUserImage);
+            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).thumbnail(.3f).into(blogUserImage);
         }
 
         public void updateLikesCount(int count){
