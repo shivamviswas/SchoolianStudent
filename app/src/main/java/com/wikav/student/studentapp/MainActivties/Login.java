@@ -16,10 +16,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.wikav.student.studentapp.Config;
 import com.wikav.student.studentapp.MySingleton;
 import com.wikav.student.studentapp.R;
 import com.wikav.student.studentapp.SessionManger;
+import com.wikav.student.studentapp.individual.IndiLogin;
+import com.wikav.student.studentapp.individual.NewProfileIndi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,16 +38,17 @@ public class Login extends AppCompatActivity {
     TextView textView;
     EditText editTextemail, editTextpassword;
     private ProgressBar progressBar;
-   private final String URL = "https://schoolian.website/android/login.php";
+    private final String URL = "https://schoolian.website/android/login.php";
     SessionManger sessionManger;
-    TextInputLayout pass_hint,email_hint;
+    FirebaseAuth mUAuth;
+    TextInputLayout pass_hint, email_hint;
     //private final String URL = "https://192.168.43.188/android/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Config config=new Config(this);
+        Config config = new Config(this);
 
         config.CheckConnection();
         button = findViewById(R.id.btn_login);
@@ -53,7 +59,7 @@ public class Login extends AppCompatActivity {
         sessionManger = new SessionManger(this);
         editTextemail = findViewById(R.id.input_email);
         editTextpassword = findViewById(R.id.input_password);
-
+        mUAuth = FirebaseAuth.getInstance();
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,12 +76,12 @@ public class Login extends AppCompatActivity {
         final String pass = editTextpassword.getText().toString().trim();
 
 
-        if (mail.isEmpty()||mail.equals("")&&pass.isEmpty()||pass.equals("")) {
+        if (mail.isEmpty() || mail.equals("") && pass.isEmpty() || pass.equals("")) {
             email_hint.setError("Please Enter Mobile Number and Password");
 
         } else {
 
-         login(mail, pass);
+            login(mail, pass);
         }
 
     }
@@ -115,7 +121,7 @@ public class Login extends AppCompatActivity {
                             String phone = object.getString("phone").trim();
                             String pass = object.getString("pass").trim();
 
-                            sessionManger.createSession(name, email, bio, sid, photo,scl_pic, scl_id, classs, lastname, phone,sclname,pass);
+                            sessionManger.createSession(name, email, bio, sid, photo, scl_pic, scl_id, classs, lastname, phone, sclname, pass);
                             Intent intent = new Intent(Login.this, HomeMenuActivity.class);
                             //                    intent.putExtra("name",name);
 //                            intent.putExtra("email",email);
@@ -123,16 +129,11 @@ public class Login extends AppCompatActivity {
                             finish();
                         }
 
-                    }
-                    else if (success.equals("0"))
-                    {
+                    } else if (success.equals("0")) {
                         pass_hint.setError("You have entered wrong password");
                         button.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
-                    }
-
-                    else if (success.equals("2"))
-                    {
+                    } else if (success.equals("2")) {
                         email_hint.setError("Invalid Mobile number or doesn't exist");
                         button.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
@@ -141,7 +142,7 @@ public class Login extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                   // email_hint.setError("Invalid Mobile no. or Password");
+                    // email_hint.setError("Invalid Mobile no. or Password");
                     //Toast.makeText(Login.this, "Error 1: " + e.toString(), Toast.LENGTH_LONG).show();
                     button.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
@@ -152,7 +153,7 @@ public class Login extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                      //  Toast.makeText(Login.this, "Error 2: " + error.toString(), Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(Login.this, "Error 2: " + error.toString(), Toast.LENGTH_LONG).show();
                         button.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -180,8 +181,13 @@ public class Login extends AppCompatActivity {
 
 
     public void forgetpassword(View view) {
-        Intent intent= new Intent(this,ForgotPasword.class);
+        Intent intent = new Intent(this, ForgotPasword.class);
         startActivity(intent);
     }
-}
 
+
+    public void onIndividual(View view) {
+        Intent i = new Intent(Login.this, IndiLogin.class);
+        startActivity(i);
+    }
+}

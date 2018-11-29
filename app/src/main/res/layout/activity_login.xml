@@ -13,24 +13,28 @@
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:paddingTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="54dp"
+            android:layout_marginBottom="30dp"
             android:src="@drawable/login" />
 
         <!-- Email Label -->
 
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:id="@+id/email_hint"
             app:backgroundTint="@color/colorPrimary"
             app:hintTextAppearance="@style/TextInputLayout">
 
@@ -42,20 +46,18 @@
                 android:drawablePadding="10dp"
                 android:hint="Mobile"
                 android:inputType="phone"
-                app:backgroundTint="@color/colorPrimary"
-               />
+                app:backgroundTint="@color/colorPrimary" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/pass_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:id="@+id/pass_hint"
             app:backgroundTint="@color/colorPrimary"
-            app:hintTextAppearance="@style/TextInputLayout"
-            >
+            app:hintTextAppearance="@style/TextInputLayout">
 
             <EditText
                 android:id="@+id/input_password"
@@ -65,18 +67,17 @@
                 android:drawablePadding="10dp"
                 android:hint="Password"
                 android:inputType="textPassword"
-                app:backgroundTint="@color/colorPrimary"
-                />
+                app:backgroundTint="@color/colorPrimary" />
         </android.support.design.widget.TextInputLayout>
 
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimary"
             android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/colorPrimary"/>
+            android:visibility="gone" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
@@ -91,17 +92,30 @@
             android:textColor="#ffffff"
             android:textSize="20dp"
             android:textStyle="bold" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/ind"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+
+            android:background="@drawable/my_button_bg"
+            android:onClick="onIndividual"
+            android:padding="5dp"
+            android:text="Go Individual"
+            android:textColor="#ff00"
+            android:textSize="16dp"/>
+
 
         <RelativeLayout
             android:layout_width="200dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/link_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="10dp"
                 android:text="No account yet?"
                 android:textSize="16dp" />
 
@@ -109,7 +123,7 @@
                 android:id="@+id/link"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="10dp"
                 android:layout_toEndOf="@id/link_signup"
                 android:layout_toRightOf="@id/link_signup"
                 android:text=" Create one"
@@ -121,14 +135,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/link"
-                android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:onClick="forgetpassword"
-                android:text=" Forget Password"
+                android:text=" Forgot Password"
                 android:textColor="#1e6af2"
                 android:textSize="16dp" />
 
         </RelativeLayout>
+
+
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

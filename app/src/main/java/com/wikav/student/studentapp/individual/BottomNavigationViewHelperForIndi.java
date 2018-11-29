@@ -1,4 +1,4 @@
-package com.wikav.student.studentapp;
+package com.wikav.student.studentapp.individual;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -8,11 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 
-import com.wikav.student.studentapp.MainActivties.HomeMenuActivity;
-import com.wikav.student.studentapp.MainActivties.NewProfile;
-import com.wikav.student.studentapp.MainActivties.SubjectActivity_2;
+import com.wikav.student.studentapp.R;
 
-public class BottomNavigationViewHelper {
+public class BottomNavigationViewHelperForIndi {
     public static void enableNavigation(final Context context, BottomNavigationView view){
        view.setOnNavigationItemSelectedListener( new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -23,15 +21,15 @@ public class BottomNavigationViewHelper {
            //bottomCheck
            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
                switch (item.getItemId()){
-                   case R.id.homes:
+                   case R.id.homeForIndi:
 
 
 
-                           Intent intent1 = new Intent( context, HomeMenuActivity.class );
+                           Intent intent1 = new Intent( context, Ind_HomeActivity.class );
                            intent1.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                            context.startActivity( intent1 );
+
 
 
                           // j=k=false;
@@ -42,7 +40,7 @@ public class BottomNavigationViewHelper {
                    case R.id.subject:
 
                            //item.set;
-                           Intent intent2 = new Intent( context, SubjectActivity_2.class );
+                           Intent intent2 = new Intent( context, CommunicationTab.class );
                            intent2.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                            context.startActivity( intent2 );
 
@@ -54,7 +52,7 @@ public class BottomNavigationViewHelper {
                            //Intent openIntent = new Intent(context, NewProfile.class);
 //                           openIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                           context.startActivity(openIntent);
-                           Intent intent5 = new Intent( context, NewProfile.class );
+                           Intent intent5 = new Intent( context, NewProfileIndi.class );
                       intent5. setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                            context.startActivity( intent5 );
 

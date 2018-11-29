@@ -42,9 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivties.Login" />
-
+        <activity android:name=".MainActivties.Login" />
         <activity android:name=".MainActivties.SubjectActivity_2" />
         <activity android:name=".activities.AnimeActivity" />
         <activity
@@ -56,42 +54,32 @@
             android:label="@string/title_activity_home_menu"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".MainActivties.Message_NevActivity"
-            />
-        <activity
-            android:name=".ContactUs_NevActivity"
-            />
-        <activity
-            android:name=".MainActivties.MyPost_NevActivity"
-       />
-        <activity
-            android:name=".MainActivties.Feedback_NevActivity"
-            />
-        <activity
-            android:name=".MainActivties.Schoolina_NevActivity"
-            />
-        <activity
-            android:name=".MainActivties.Help_NevActivity"
-             />
-        <activity
-            android:name=".MainActivties.NotificationActivity"
-             />
+        <activity android:name=".MainActivties.Message_NevActivity" />
+        <activity android:name=".ContactUs_NevActivity" />
+        <activity android:name=".MainActivties.MyPost_NevActivity" />
+        <activity android:name=".MainActivties.Feedback_NevActivity" />
+        <activity android:name=".MainActivties.Schoolina_NevActivity" />
+        <activity android:name=".MainActivties.Help_NevActivity" />
+        <activity android:name=".MainActivties.NotificationActivity" />
         <activity android:name=".MainActivties.NewProfile" />
         <activity android:name=".MainActivties.feedUpload" />
         <activity
             android:name=".EditProfile"
             android:noHistory="true" />
+        <activity android:name=".Confirm_password_Activity" />
+        <activity android:name=".MainActivties.ForgotPasword" />
+        <activity android:name=".submitOtp" />
+        <activity android:name=".NoInternetActivity" />
+        <activity android:name=".individual.IndiLogin" />
+        <activity android:name=".individual.NewProfileIndi" />
+        <activity android:name=".individual.CommunicationTab" />
+        <activity android:name=".individual.Ind_HomeActivity" />
+        <activity android:name=".individual.feedUploadForIndi" />
         <activity
-            android:name=".Confirm_password_Activity"
-            />
-        <activity
-            android:name=".MainActivties.ForgotPasword"
-            />
-        <activity
-            android:name=".submitOtp"
-            />
-        <activity android:name=".NoInternetActivity"></activity>
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".individual.SetProfileActivity" />
+        <activity android:name=".individual.CommentActivity"></activity>
     </application>
 
 </manifest>

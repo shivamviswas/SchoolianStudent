@@ -58,12 +58,6 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
-
-
-        <!--botton navigation view-->
-
-
-
 </android.support.design.widget.CoordinatorLayout>
     <ProgressBar
         android:id="@+id/progress1"

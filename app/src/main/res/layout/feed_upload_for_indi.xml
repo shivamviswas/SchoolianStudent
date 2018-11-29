@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".individual.feedUploadForIndi"
+    android:background="#fff">
+<ProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+    android:id="@+id/progressFeedUplod"
+    android:indeterminate="true"
+    android:backgroundTintMode="src_atop"
+    android:indeterminateTint="@color/colorPrimary"
+    android:visibility="gone"/>
+    <EditText
+        android:id="@+id/postText"
+        android:layout_below="@+id/progressFeedUplod"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:hint="Write your query here.. "
+        android:background="@drawable/boxforcomnt"
+         />
+
+    <ImageView
+        android:id="@+id/postImage2"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_below="@+id/postText"
+        android:layout_margin="30dp"
+        android:visibility="gone"
+        android:background="@drawable/boxforcomnt"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_below="@+id/postImage2"
+        android:id="@+id/linearLayout"
+        android:orientation="horizontal"
+       >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight=".5"
+            android:elevation="5dp">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/ic_delete"
+            android:id="@+id/imageButton"
+            android:background="#fff"
+            android:visibility="gone"
+            android:layout_weight=".5"/>
+            <Button
+                android:id="@+id/choosIm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fff"
+                android:onClick="chooseImageIndi"
+                android:text="Image"
+                android:layout_weight=".5"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:elevation="5dp">
+        <Button
+            android:id="@+id/postUp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:text="Post" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

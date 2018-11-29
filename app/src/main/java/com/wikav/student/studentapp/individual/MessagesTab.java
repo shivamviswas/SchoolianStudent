@@ -1,4 +1,4 @@
-package com.wikav.student.studentapp;
+package com.wikav.student.studentapp.individual;
 
 
 import android.os.Bundle;
@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wikav.student.studentapp.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SyllabusFragment_3 extends Fragment {
+public class MessagesTab extends Fragment {
 
 
-    public SyllabusFragment_3() {
+    public MessagesTab() {
         // Required empty public constructor
     }
 
@@ -23,7 +25,7 @@ public class SyllabusFragment_3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate( R.layout.fragment_syllabus_fragment_3, container, false );
+        return inflater.inflate( R.layout.fragment_subject__fragment1, container, false );
     }
 
 }

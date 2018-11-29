@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+<ProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="?android:attr/progressBarStyleHorizontal"
+    android:indeterminate="true"
+    android:indeterminateTintMode="src_atop"
+    android:indeterminateTint="@color/colorPrimary"
+    android:id="@+id/progressForBottomSheet"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:hintTextAppearance="@style/TextInputLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Name"
+                android:id="@+id/upName"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/person_name"
+                android:drawablePadding="10dp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+
+        app:backgroundTint="@color/colorPrimary"
+        app:hintTextAppearance="@style/TextInputLayout">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:maxLength="10"
+            android:hint="Mobile"
+            android:inputType="phone"
+            android:id="@+id/upmobile"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_format_list_numbered_black_24dp"
+            android:drawablePadding="10dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+
+        app:backgroundTint="@color/colorPrimary"
+        app:hintTextAppearance="@style/TextInputLayout">
+
+        <EditText
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Email"
+            android:id="@+id/upemail"
+            android:inputType="textWebEmailAddress"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/ic_email_black_24dp"
+            android:drawablePadding="10dp" />
+    </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:hintTextAppearance="@style/TextInputLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Bio"
+                android:textStyle="bold"
+                android:id="@+id/upbio"
+                android:drawableLeft="@drawable/ic_format_list_numbered_black_24dp"
+                android:drawablePadding="10dp" />
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:background="@drawable/color"
+            android:padding="5dp"
+            android:text="Submit"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:id="@+id/submitUpdate"
+            android:layout_gravity="right"/>
+    </LinearLayout>
+
+</ScrollView>

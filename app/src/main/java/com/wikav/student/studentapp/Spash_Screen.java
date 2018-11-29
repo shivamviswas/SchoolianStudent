@@ -32,8 +32,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.wikav.student.studentapp.MainActivties.HomeMenuActivity;
 import com.wikav.student.studentapp.MainActivties.Login;
+import com.wikav.student.studentapp.individual.Ind_HomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +53,7 @@ public class Spash_Screen extends AppCompatActivity {
        ImageView retry,logopic,sclfont;
        TextView tapto, pst;
     AlertDialog.Builder builder;
+    private FirebaseAuth mAuth;
 Config    config;
     private final String uplod="https://schoolian.website/android/getAppUpdate.php";
     private final String URL_PRODUCTS = "https://schoolian.website/android/getPostData.php";
@@ -64,6 +68,7 @@ Config    config;
         setContentView(R.layout.activity_spash__screen);
        // retry = findViewById(R.id.retry);
        // tapto = findViewById(R.id.tapto);
+        mAuth=FirebaseAuth.getInstance();
         logopic = findViewById(R.id.logo);
         sclfont = findViewById(R.id.sclFont);
         pst = findViewById(R.id.slogo);
@@ -81,35 +86,9 @@ Config    config;
 //        pst.startAnimation(animation1);
      //  logopic.animate().alpha(1f);
 
-        config=new Config(this);
-
-        if(config.haveNetworkConnection())
-        {
-            logopic.animate().translationYBy(-200f).setDuration(1200);
-
-            new Handler().postDelayed(new Runnable() {
-
-// Using handler with postDelayed called runnable run method
-
-                @Override
-
-                public void run() {
-
-                    sclfont.animate().alpha(1f).setDuration(1500);
-                    pst.animate().alpha(1f).setDuration(1500);
 
 
-                }
 
-            }, 1*1000);
-            updateApp();
-        }
-        else
-        {
-            Intent intent =new Intent(this,NoInternetActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
 
 //        int Permission_All = 1;
@@ -224,7 +203,52 @@ Config    config;
 //    }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        FirebaseUser currentUser=mAuth.getCurrentUser();
+        if (currentUser==null)
+        {
+            config=new Config(this);
+
+            if(config.haveNetworkConnection())
+            {
+                logopic.animate().translationYBy(-200f).setDuration(1200);
+
+                new Handler().postDelayed(new Runnable() {
+
+// Using handler with postDelayed called runnable run method
+
+                    @Override
+
+                    public void run() {
+
+                        sclfont.animate().alpha(1f).setDuration(1500);
+                        pst.animate().alpha(1f).setDuration(1500);
+
+
+                    }
+
+                }, 1*1000);
+                updateApp();
+            }
+            else
+            {
+                Intent intent =new Intent(Spash_Screen.this,NoInternetActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+        else
+        {
+            Intent intent =new Intent(Spash_Screen.this,Ind_HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+
+    }
 
     public void updateApp(){
         progressBar.setVisibility(View.VISIBLE);
